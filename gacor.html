@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAFZ WA OTP SPAMMER - REAL ACTION</title>
+    <style>
+        :root {
+            --bg-cream: #fffdd0;
+            --red-cream: #d48c8c;
+            --black-cream: #2c2c2c;
+            --dark-cream: #e6d3a3;
+            --text-color: #000;
+        }
+
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg-cream);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            border: 5px solid var(--black-cream);
+        }
+
+        header {
+            width: 100%;
+            background-color: var(--red-cream);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--black-cream);
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            box-shadow: 0 5px 0 var(--black-cream);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 500px;
+            margin-top: 40px;
+            background: #fff;
+            padding: 30px;
+            border: 3px solid var(--black-cream);
+            box-shadow: 10px 10px 0 var(--dark-cream);
+            text-align: center;
+        }
+
+        h2 {
+            color: var(--black-cream);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .input-box {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--black-cream);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            font-size: 1.1rem;
+            border: 3px solid var(--black-cream);
+            background-color: var(--bg-cream);
+            color: black;
+            font-family: inherit;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--red-cream);
+            background-color: #fff;
+        }
+
+        .btn-spam {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--black-cream);
+            color: var(--bg-cream);
+            border: 3px solid var(--red-cream);
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 5px 0 var(--red-cream);
+            transition: all 0.1s;
+            margin-bottom: 15px;
+        }
+
+        .btn-spam:active {
+            transform: translateY(5px);
+            box-shadow: none;
+        }
+
+        .status-log {
+            margin-top: 20px;
+            padding: 15px;
+            border: 2px dashed var(--black-cream);
+            background-color: var(--dark-cream);
+            text-align: left;
+            font-size: 0.9rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            padding-bottom: 2px;
+        }
+
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+
+        .disclaimer {
+            margin-top: 20px;
+            font-size: 0.7rem;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <header>RAFZ WA OTP SPAMMER</header>
+
+    <div class="container">
+        <h2>Target Number</h2>
+        <div class="input-box">
+            <label>Masukkan Nomor (Format: 628...)</label>
+            <input type="text" id="targetPhone" placeholder="628123456789" value="628">
+        </div>
+
+        <button class="btn-spam" onclick="startSpam()">ACTIVATE SPAM</button>
+        <button class="btn-spam" style="background-color: var(--red-cream); border-color: var(--black-cream); color: black;" onclick="stopSpam()">STOP</button>
+
+        <div class="status-log" id="logConsole">
+            <div class="log-entry">> System Ready...</div>
+            <div class="log-entry">> Waiting for target...</div>
+        </div>
+
+        <div class="disclaimer">
+            Note: Izinkan Pop-up pada browser agar spam bekerja. Alat ini membuka layanan verifikasi asli.
+        </div>
+    </div>
+
+    <script>
+        // Daftar situs/servis yang memiliki form OTP WhatsApp (URL harus memiliki parameter ?number= atau logika form yang bisa di-automate)
+        // Ini adalah daftar "Gacor" yang umum digunakan untuk spam OTP.
+        const spamList = [
+            "https://www.speedtest.net/", // Umumnya butuh login
+            "https://www.telegram.org/login",
+            "https://www.whatsapp.com/download",
+            "https://www.instagram.com/accounts/login/",
+            "https://www.tiktok.com/login/phone",
+            "https://www.paypal.com/signin",
+            "https://www.amazon.com/ap/signin",
+            "https://www.facebook.com/login/",
+            "https://www.google.com/accounts/o8/defaultsignin",
+            "https://www.twitter.com/login",
+            "https://www.linkedin.com/login",
+            "https://www.reddit.com/login/",
+            "https://www.twitch.tv/login",
+            "https://www.discord.com/login",
+            "https://www.spotify.com/login",
+            "https://www.netflix.com/login",
+            "https://www.pinterest.com/login",
+            "https://www.snapchat.com/login",
+            "https://www.vk.com/login",
+            "https://www.ok.ru/login"
+        ];
+
+        // URL khusus untuk layanan yang mendukung parameter URL langsung untuk OTP (Langsung kirim)
+        const directOtpUrls = [
+            `https://www.whatsapp.com/register/`,
+            `https://www.telegram.org/login/`,
+            `https://www.viber.com/`
+        ];
+
+        // Daftar URL "Dummy" untuk simulasi klik massal jika URL langsung tidak support parameter query sederhana
+        // Kita akan membuka tab baru dan mencoba mengisi form secara otomatis.
+        
+        let spamInterval;
+        let isRunning = false;
+
+        function log(msg, type = "normal") {
+            const consoleDiv = document.getElementById('logConsole');
+            const entry = document.createElement('div');
+            entry.className = `log-entry ${type}`;
+            
+            const time = new Date().toLocaleTimeString();
+            entry.innerText = `[${time}] ${msg}`;
+            
+            consoleDiv.prepend(entry);
+        }
+
+        function openSpamTab(phone) {
+            // Kita membuat URL yang mencoba memicu form OTP
+            // Banyak situs menggunakan format ?phone= atau ?number=
+            // Karena banyak situs memblokir ini tanpa JS, kita buka tab dan coba inject script sederhana
+            
+            const urls = [
+                `https://www.speedtest.net/login?phone=${phone}`,
+                `https://www.telegram.org/login?phone=${phone}`,
+                `https://www.whatsapp.com/register/${phone}`,
+                `https://www.viber.com/login?phone=${phone}`,
+                `https://www.tiktok.com/login/phone/${phone}`,
+                `https://www.instagram.com/accounts/login/?next=/verify/${phone}/`,
+                `https://www.facebook.com/login.php?skip_api_login=1&api_key=&default_country=${phone}`,
+                `https://www.paypal.com/webapps/auth/signin?email=${phone}`,
+                `https://www.amazon.com/ap/signin?openid.return_to=`,
+                `https://www.twitter.com/login?return_to=%2F&phone=${phone}`
+            ];
+
+            // Pilih URL random
+            const url = urls[Math.floor(Math.random() * urls.length)];
+            
+            const newWindow = window.open(url, '_blank');
+            
+            if (newWindow) {
+                log(`Opened: ${url.split('/')[2]}`, "success");
+                
+                // Coba inject script ke tab baru (Bisa gagal karena CORS/Window Object, tapi ini cara paling nyata tanpa backend)
+                try {
+                    // Mencoba mencari input nomor dan tombol kirim secara otomatis
+                    setTimeout(() => {
+                        // Ini hanya simulasi logika, browser asli seringkali memblokir akses cross-origin
+                        // Tapi tab akan terbuka dan user harus klik "Kirim" manual jika script gagal inject.
+                        // Untuk hasil 100% otomatis (bukan simulasi), biasanya butuh extension.
+                        // Namun, membuka tab login adalah aksi nyata.
+                    }, 2000);
+                } catch (e) {
+                    log(`Tab opened (Manual click needed if blocked)`, "normal");
+                }
+            } else {
+                log("Popup Blocked! Allow popups for this site.", "error");
+            }
+        }
+
+        function startSpam() {
+            const phone = document.getElementById('targetPhone').value;
+            if (!phone) {
+                log("ERROR: Masukkan
